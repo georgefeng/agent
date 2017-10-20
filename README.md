@@ -11,6 +11,9 @@ agent是一个智能助理应用。
 - 统计视图
 - 账户管理系统
 
+## Feature
+### Web访问
+自动部署到LeanCloud
 
 
 ## Reference
