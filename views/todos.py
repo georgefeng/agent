@@ -47,6 +47,7 @@ def show_schedule():
     for a_todo in todos:
         action_list.append(eval(a_todo.get('content')))
 
+    print(action_list)
     task_list = []
 
     for _action in action_list:
