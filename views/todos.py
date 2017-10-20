@@ -107,10 +107,11 @@ def show_schedule():
         # update todo_list
         todo_list.append([_heat, _task['freq'], _task['task_name']])
 
-        # print todo list
-        todo_list.sort(key=lambda x:x[0],reverse=True)  #逆序
-        todo_list[0:0] = [['heat', 'freq', 'task_name']]
+    # print todo list
+    todo_list.sort(key=lambda x:x[0],reverse=True)  #逆序
+    todo_list[0:0] = [['heat', 'freq', 'task_name']]
 
-        return str(todo_list)
+    return render_template('schedule.html', schedule=todo_list)
+    # return str(todo_list)
 
 
