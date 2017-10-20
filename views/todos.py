@@ -48,6 +48,8 @@ def show_schedule():
         action_list.append(eval(a_todo.get('content')))
 
     print(action_list)
+    action_list = sorted(action_list, key=lambda k: list(k.keys())[0]) 
+
     task_list = []
 
     for _action in action_list:
