@@ -75,7 +75,7 @@ def show_schedule():
     #
     task_list = []
 
-    actions = Query(Todo).descending('createdAt').find()
+    actions = Query(Todo).ascending('createdAt').find()
     for _action in actions:
         _args = action_parser(_action.get('content'))
         print(_action.get('createdAt'))
