@@ -87,26 +87,33 @@ def show_schedule():
                 {
                     'task_name': _args.task,
                     'freq': _args.freq,
-                    'last': _time
+                    'last': _args.createdAt
                 }
             )
 
-        elif _args.is_exec:
-            _task_name = _args.task
-            _task_id = [_id for _id, _dict in enumerate(task_list) if _dict['task_name'] == _task_name][0]
-            task_list[_task_id]['last'] = _time
 
         elif _args.is_update:
             _task_name = _args.task
             _task_id = [_id for _id, _dict in enumerate(task_list) if _dict['task_name'] == _task_name][0]
             old_task = task_list[_task_id]
-            task_list[_task_id] ={
+            task_list[_task_id] = {
                 'task_name': _args.task,
                 'freq': _args.freq,
                 'last': old_task['last']
             }
 
+        elif _args.is_delete:
+            _task_name = _args.task
+            _task_id = [_id for _id, _dict in enumerate(task_list) if _dict['task_name'] == _task_name][0]
+            task_list[_task_id] = None
 
+        if _args.is_exec:
+            _task_name = _args.task
+            _task_id = [_id for _id, _dict in enumerate(task_list) if _dict['task_name'] == _task_name][0]
+            task_list[_task_id]['last'] = _time
+
+
+    task_list = [_task for _task in task_list if _task is not None]
 
     todo_list = []
     for _task in task_list:

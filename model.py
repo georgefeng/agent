@@ -7,10 +7,12 @@ def action_parser(action_str):
     parser = argparse.ArgumentParser(description='Action app')
     parser.add_argument('task', help="Please input the task name.")
     parser.add_argument('-f', '--freq', default=2, type=int)
-    parser.add_argument('-c', '--create', type=int, dest='createAt', default=19700101000000)
+    parser.add_argument('-c', '--create', type=int, dest='createdAt', default=19700101000000)
     parser.add_argument('-n', '--new', action="store_true", dest='is_new', help='Add a new task.')
     parser.add_argument('-e', '--exec', action="store_true", dest='is_exec', help='Refresh last.')
     parser.add_argument('-u', '--update', action="store_true", dest='is_update')
+    parser.add_argument('-d', '--delete', action="store_true", dest='is_delete')
+
     #
     # parser.add_argument('-a','--add', action="store_true", default=False)
     # parser.add_argument('-b', action="store", dest="babgaa")
