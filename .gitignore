@@ -89,3 +89,6 @@ ENV/
 # LeanCloud settings
 .leancloud/
 .avoscloud/
+
+# Other
+.idea/

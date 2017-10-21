@@ -9,7 +9,7 @@ from flask import request
 from flask import redirect
 from flask import url_for
 from flask import render_template
-
+from model import action_parser
 
 class Todo(Object):
     pass
@@ -41,36 +41,70 @@ def add():
 
 @todos_view.route('/schedule', methods=['GET'])
 def show_schedule():
-    todos = Query(Todo).descending('createdAt').find()
-    
-    action_list = []
-    for a_todo in todos:
-        action_list.append(eval(a_todo.get('content')))
-
-    print(action_list)
-    action_list = sorted(action_list, key=lambda k: list(k.keys())[0]) 
-
+    # todos = Query(Todo).descending('createdAt').find()
+    #
+    # action_list = []
+    # for a_todo in todos:
+    #     action_list.append(eval(a_todo.get('content')))
+    #
+    #
+    #
+    # print(action_list)
+    # action_list = sorted(action_list, key=lambda k: list(k.keys())[0])
+    #
+    # task_list = []
+    #
+    # for _action in action_list:
+    #     for _time, _text in _action.items():
+    #         if 'add_task' in _text:
+    #             _freq = int(_text[10])
+    #             _task_name = str(_text[12:])
+    #
+    #             task_list.append(
+    #                 {
+    #                     'task_name': _task_name,
+    #                     'freq': _freq,
+    #                     'last': _time
+    #                 }
+    #             )
+    #
+    #         elif 'exec_task' in _text:
+    #             _task_name = str(_text[11:])
+    #             _task_id = [_id for _id, _dict in enumerate(task_list) if _dict['task_name'] == _task_name][0]
+    #             task_list[_task_id]['last'] = _time
+    #
     task_list = []
 
-    for _action in action_list:
-        for _time, _text in _action.items(): 
-            if 'add_task' in _text:
-                _freq = int(_text[10])
-                _task_name = str(_text[12:])
+    actions = Query(Todo).descending('createdAt').find()
+    for _action in actions:
+        _args = action_parser(_action.get('content'))
+        _time = int(filter(str.isdigit, str(_action.get('createAt')))[:14])
 
-                task_list.append(
-                    {
-                        'task_name': _task_name,
-                        'freq': _freq,
-                        'last': _time
-                    }
-                )
+        if _args.is_new:
+            task_list.append(
+                {
+                    'task_name': _args.task_name,
+                    'freq': _args.freq,
+                    'last': _time
+                }
+            )
 
-            elif 'exec_task' in _text:
-                _task_name = str(_text[11:])
-                _task_id = [_id for _id, _dict in enumerate(task_list) if _dict['task_name'] == _task_name][0]
-                task_list[_task_id]['last'] = _time
-    
+        elif _args.is_exec:
+            _task_name = _args.task_name
+            _task_id = [_id for _id, _dict in enumerate(task_list) if _dict['task_name'] == _task_name][0]
+            task_list[_task_id]['last'] = _time
+
+        elif _args.is_update:
+            _task_name = _args.task_name
+            _task_id = [_id for _id, _dict in enumerate(task_list) if _dict['task_name'] == _task_name][0]
+            old_task = task_list[_task_id]
+            task_list[_task_id] ={
+                'task_name': _args.task_name,
+                'freq': _args.freq,
+                'last': old_task['last']
+            }
+
+
 
     todo_list = []
     for _task in task_list:
