@@ -78,6 +78,8 @@ def show_schedule():
     actions = Query(Todo).descending('createdAt').find()
     for _action in actions:
         _args = action_parser(_action.get('content'))
+        print(_action.get('createAt'))
+        print(type(_action.get('createAt')))
         _time = int(filter(str.isdigit, str(_action.get('createAt')))[:14])
 
         if _args.is_new:
